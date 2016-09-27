@@ -1,9 +1,9 @@
 微信小程序会话管理中间件
 ======================
 
-微信的网络请求接口 `wx.request()` 没有携带 Cookies，这让传统基于 Cookies 实现的会话管理不再适用。为了让处理微信小程序的服务能够识别会话，我们推出了 [weapp-session]()。
+微信的网络请求接口 `wx.request()` 没有携带 Cookies，这让传统基于 Cookies 实现的会话管理不再适用。为了让处理微信小程序的服务能够识别会话，我们推出了 [weapp-session](https://github.com/CFETeam/weapp-session)。
 
-[weapp-session]() 使用自定义 Header 来传递微信小程序内用户信息，在服务内可以直接获取用户在微信的身份。
+[weapp-session](https://github.com/CFETeam/weapp-session) 使用自定义 Header 来传递微信小程序内用户信息，在服务内可以直接获取用户在微信的身份。
 
 会话层使用 `Redis` 作为缓存管理，具有高效可靠的特点。
 
