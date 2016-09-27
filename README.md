@@ -63,7 +63,7 @@ app.listen(3000);
 
 会话层的实现和传统 Cookie 的实现方式类似，都是在 Header 上使用特殊的字段跟踪。一个请求的完整流程如下：
 
-![请求生命周期](assert/request-lifecycle.png)
+![请求生命周期](asset/request-lifecycle.png)
 
 1. 客户端（微信小程序）发起请求 `request`
 2. [weapp-session-client](https://github.com/CFETeam/weapp-session-client) 包装 `request`
@@ -77,6 +77,7 @@ app.listen(3000);
     * 如果 `code` 为空，跳到第 `4` 步
     * 如果 `code` 不为空，且 `rawData` 不为空，需要进行签名校验
         + 使用 `code`，`appid`、`app_secret` 请求微信接口获得 `session_key` 和 `openid`
+            - 如果接口失败，响应 `ERR_SESSION_KEY_EXCHANGE_FAILED`
         + 使用签名算法通过 `rawData` 和 `session_key` 计算签名 `signature2`
         + 对比 `signature` 和 `signature2`
             - 签名一致，解析 `rawData` 为 `wxUserInfo`
@@ -84,10 +85,10 @@ app.listen(3000);
                 * 把 `(code, wxUserInfo)` 缓存到 Redis
                 * 把 `wxUserInfo` 存放在 `request.$wxUserInfo` 里
                 * 跳到第 `4` 步
-            - 签名不一致，响应 `ERR_SESSION_KEY_EXCHANGE_FAILED`
+            - 签名不一致，响应 `ERR_UNTRUSTED_RAW_DATA`
     * 如果 `code` 不为空，但 `rawData` 为空，从 Redis 根据 `code` 查询缓存的用户信息
         - 找到用户信息，存放在 `request.$wxUserInfo` 字段里，跳到第 `4` 步
-        - 没找到用户信息（可能是过期），设置 `request.$wxUserInfo` 为 `null`
+        - 没找到用户信息（可能是过期），响应 `ERR_SESSION_EXPIRED`
 4. `request` 被业务处理，可以使用 `request.$wxUserInfo` 来获取用户信息（`request.$wxUserInfo` 可能为空，业务需要自行处理）
 
 ## LICENSE
