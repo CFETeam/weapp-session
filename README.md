@@ -66,7 +66,7 @@ app.listen(3000);
 ![请求生命周期](assert/request-lifecycle.png)
 
 1. 客户端（微信小程序）发起请求 `request`
-2. [mp-session-client](https://github.com/CFETeam/mp-session-client) 包装 `request`
+2. [weapp-session-client](https://github.com/CFETeam/weapp-session-client) 包装 `request`
     * 首次请求
         - 调用 `wx.login()` 和 `wx.getUserInfo()` 接口获得 `code`、`rawData` 和 `signature`
         - `requset` 的头部带上 `code`、`rawData` 和 `signature`
