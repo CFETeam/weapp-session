@@ -10,6 +10,8 @@ const jscode2session = require('./lib/jscode2session');
 let store;
 
 const handler = co.wrap(function *(req, res, next) {
+    req.$wxUserInfo = null;
+
     if (config.ignore(req, res)) {
         return next();
     }
@@ -46,25 +48,28 @@ const handler = co.wrap(function *(req, res, next) {
 
     try {
         rawData = decodeURIComponent(rawData);
+        wxUserInfo = JSON.parse(rawData);
     } catch (error) {
         return res.json(wrapError(error));
     }
 
-    try {
-        ({ sessionKey, openId } = yield jscode2session.exchange(code));
-    } catch (error) {
-        return res.json(wrapError(error, { reason: errors.ERR_SESSION_KEY_EXCHANGE_FAILED }));
+    if (config.ignoreSignature === true) {
+        openId = ('PSEUDO_OPENID_' + sha1(wxUserInfo.avatarUrl)).slice(0, 28);
+    } else {
+        try {
+            ({ sessionKey, openId } = yield jscode2session.exchange(code));
+        } catch (error) {
+            return res.json(wrapError(error, { reason: errors.ERR_SESSION_KEY_EXCHANGE_FAILED }));
+        }
+
+        // check signature
+        if (sha1(rawData + sessionKey) !== signature) {
+            let error = new Error('untrusted raw data');
+            return res.json(wrapError(error, { reason: errors.ERR_UNTRUSTED_RAW_DATA }));
+        }
     }
 
-    // check signature
-    if (sha1(rawData + sessionKey) !== signature) {
-        let error = new Error('untrusted raw data');
-        return res.json(wrapError(error, { reason: errors.ERR_UNTRUSTED_RAW_DATA }));
-    }
-
     try {
-        // `rawData` is trusted `wxUserInfo`
-        wxUserInfo = JSON.parse(rawData);
         wxUserInfo.openId = openId;
 
         let oldCode = yield store.get(openId);
