@@ -1,0 +1,22 @@
+{
+  "name": "weapp-session",
+  "version": "0.1.0",
+  "description": "为微信小程序提供会话管理功能",
+  "main": "index.js",
+  "author": "CFETeam",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CFETeam/weapp-session.git"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "co": "^4.6.0",
+    "es6-promisify": "^4.1.0",
+    "merge": "^1.2.0",
+    "redis": "^2.6.2",
+    "request": "^2.75.0"
+  }
+}
