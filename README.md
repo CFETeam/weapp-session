@@ -63,7 +63,7 @@ app.listen(3000);
 
 会话层的实现和传统 Cookie 的实现方式类似，都是在 Header 上使用特殊的字段跟踪。一个请求的完整流程如下：
 
-![请求生命周期](asset/request-lifecycle.png)
+![请求生命周期](assets/request-lifecycle.png)
 
 1. 客户端（微信小程序）发起请求 `request`
 2. [weapp-session-client](https://github.com/CFETeam/weapp-session-client) 包装 `request`

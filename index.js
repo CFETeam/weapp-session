@@ -94,5 +94,5 @@ module.exports = (options = {}) => {
         return handler;
     }
 
-    throw new Error('mp-session can only be called once.');
+    throw new Error('weapp-session can only be called once.');
 };
