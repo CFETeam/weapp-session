@@ -12,5 +12,6 @@ module.exports = {
         ttl: 7200,
     },
 
+    ignoreSignature: false,
     ignore: () => false,
 };
