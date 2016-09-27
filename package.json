@@ -1,6 +1,6 @@
 {
   "name": "weapp-session",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "为微信小程序提供会话管理功能",
   "main": "index.js",
   "author": "CFETeam",
